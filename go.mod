@@ -10,7 +10,7 @@ require (
 	github.com/shopspring/decimal v1.3.1
 	github.com/zeromicro/go-zero v1.5.2
 	gorm.io/driver/mysql v1.5.1
-	gorm.io/gen v0.3.22
+	gorm.io/gen v0.3.21
 	gorm.io/gorm v1.25.1
 	gorm.io/plugin/dbresolver v1.4.1
 	gorm.io/plugin/soft_delete v1.2.1

@@ -30,7 +30,7 @@ func main() {
 	// 生成实例
 	g := gen.NewGenerator(gen.Config{
 		// 相对执行`go run`时的路径, 会自动创建目录
-		OutPath: "../../dao/query",
+		OutPath: "cmd/dao/query",
 		ModelPkgPath: "./model",
 
 
