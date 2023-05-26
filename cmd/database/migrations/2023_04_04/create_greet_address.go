@@ -1,8 +1,8 @@
 package main
 
 import (
-	"go-zero-example/cmd/database"
 	"gorm.io/plugin/soft_delete"
+	"order/cmd/database"
 	"time"
 )
 

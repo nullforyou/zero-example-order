@@ -2,8 +2,8 @@ package main
 
 import (
 	"gorm.io/plugin/soft_delete"
+	"order/cmd/database"
 	"time"
-	"workbench/cmd/database"
 )
 
 type GreetOrder struct {
