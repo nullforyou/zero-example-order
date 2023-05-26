@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./order";
+
+message CreateOrderReq{
+int64 id = 1;
+}
+
+message CreateOrderReply{
+int64 id = 1;
+string mobile = 2;
+string nikename = 3;
+}
+
+service user {
+rpc getUser(IdReq) returns(UserInfoReply);
+}
