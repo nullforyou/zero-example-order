@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"greet-pb/pb/userclient"
+	"greet-pb/user/userclient"
 	"order/cmd/api/internal/config"
 )
 

@@ -7,7 +7,7 @@ import (
 	"go-common/ctxdata"
 	"go-common/utils/xerr"
 	"gorm.io/gorm"
-	"greet-pb/pb/types/user"
+	"greet-pb/user/types/user"
 	"order/cmd/api/business"
 	"order/cmd/dao/model"
 	"order/cmd/dao/query"

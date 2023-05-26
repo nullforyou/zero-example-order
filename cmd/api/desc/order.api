@@ -1,0 +1,33 @@
+syntax = "v1"
+
+info(
+	title: "订单服务"
+	desc: "订单服务"
+	author: "jiangx"
+	email: "jiangx@xxx.com"
+	version: "v1"
+)
+
+import (
+	"order/order.api"
+)
+
+@server(
+	prefix: order
+	group: order
+	jwt: Jwt
+)
+
+service orders-api {
+	@doc "获取订单列表"
+	@handler getOrders
+	get /orders (OrderItemReq) returns (OrderItemResp)
+	
+	@doc "创建订单"
+	@handler createOrder
+	post /orders (CreateOrderReq) returns (CreateOrderResp)
+	
+	@doc "获取订单详情"
+	@handler getOrder
+	get /orders/:id (OrderItemReq) returns (OrderItemResp)
+}
