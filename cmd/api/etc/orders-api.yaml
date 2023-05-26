@@ -16,7 +16,7 @@ CacheRedis:
     Type: node
 Jwt:
   AccessSecret: 26dd14afdb7e622637b2abf4f15a5714a64df2ef6440bb6617e814815ae973ddd2998298c4491e165ae50bf0790fba8afce9b350e466e421974881c13d034f8d
-  AccessExpire: 3600
+  AccessExpire: 31104000
 
 UserRpc:
   Etcd:

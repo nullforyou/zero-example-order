@@ -21,7 +21,7 @@ import (
 service orders-api {
 	@doc "获取订单列表"
 	@handler getOrders
-	get /orders (OrderItemReq) returns (OrderItemResp)
+	get /orders (OrdersCollectionReq) returns (OrdersCollectionResp)
 	
 	@doc "创建订单"
 	@handler createOrder
