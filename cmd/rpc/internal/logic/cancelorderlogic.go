@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"errors"
-	"go-common/utils/xerr"
+	"go-zero-base/utils/xerr"
 	"gorm.io/gorm"
 	"order/cmd/business"
 	"order/cmd/dao/model"
@@ -36,7 +36,7 @@ func (l *CancelOrderLogic) CancelOrder(in *order.CancelOrderReq) (*order.CancelO
 	orderDao := query.Order
 	orderModel, err := orderDao.WithContext(context.Background()).Where(orderDao.OrderSerialNumber.Eq(in.GetOrderSerialNumber())).First()
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorOrderNotExists"))
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorNotFound), xerr.SetMsg("订单不存在"))
 	}
 	if orderModel.OrderStatus == business.WAIT_PAYMENT_STATE {
 		updateOrder := model.Order{}

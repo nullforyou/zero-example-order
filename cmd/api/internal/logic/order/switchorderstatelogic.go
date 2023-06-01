@@ -3,7 +3,7 @@ package order
 import (
 	"context"
 	"errors"
-	"go-common/utils/xerr"
+	"go-zero-base/utils/xerr"
 	"gorm.io/gorm"
 	"greet-pb/order/types/order"
 	"order/cmd/api/internal/svc"
@@ -34,7 +34,7 @@ func (l *SwitchOrderStateLogic) SwitchOrderState(req *types.SwitchOrderStateReq)
 	orderDao := query.Order
 	count, err := orderDao.WithContext(context.Background()).Where(orderDao.OrderSerialNumber.Eq(req.OrderSerialNumber)).Count()
 	if count == 0 || err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorOrderNotExists"))
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorNotFound), xerr.SetMsg("订单不存在"))
 	}
 	if strings.EqualFold(req.State, "cancel") {
 		_, err := l.svcCtx.OrderRpc.CancelOrder(l.ctx, &order.CancelOrderReq{OrderSerialNumber: req.OrderSerialNumber, CancelOperator: business.USER_CANCEL, CancelCause: "用户取消"})

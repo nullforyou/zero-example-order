@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"github.com/pkg/errors"
-	"go-common/utils/xerr"
+	"go-zero-base/utils/xerr"
 	"gorm.io/gorm"
 	"greet-pb/order/types/order"
 	"order/cmd/business"
@@ -34,7 +34,7 @@ func (l *CloseOrderLogic) CloseOrder(in *order.CloseOrderReq) (*order.CloseOrder
 	orderDao := query.Order
 	orderModel, err := orderDao.WithContext(context.Background()).Where(orderDao.OrderSerialNumber.Eq(in.GetOrderSerialNumber())).First()
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorOrderNotExists"))
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("订单不存在"))
 	}
 	if orderModel.OrderStatus == business.WAIT_PAYMENT_STATE {
 		orderUpdate := model.Order{}

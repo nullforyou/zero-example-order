@@ -3,7 +3,7 @@ package order
 import (
 	"context"
 	"errors"
-	"go-common/utils/xerr"
+	"go-zero-base/utils/xerr"
 	"gorm.io/gorm"
 	"order/cmd/dao/model"
 
@@ -30,7 +30,7 @@ func NewGetOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetOrder
 func (l *GetOrderLogic) GetOrder(req *types.OrderItemReq) (resp *types.OrderItemResp, err error) {
 	err = l.svcCtx.DbEngine.Model(model.Order{}).Where("order_serial_number = ?", req.OrderSerialNumber).First(&resp).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorOrderNotExists"), xerr.SetMsg("订单不存在"))
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorNotFound), xerr.SetMsg("订单不存在"))
 	}
 	return resp, nil
 }

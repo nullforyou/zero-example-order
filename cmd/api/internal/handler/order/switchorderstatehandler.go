@@ -1,7 +1,7 @@
 package order
 
 import (
-	"go-common/utils/response"
+	"go-zero-base/utils/response"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
@@ -14,17 +14,18 @@ func SwitchOrderStateHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.SwitchOrderStateReq
 		if err := httpx.Parse(r, &req); err != nil {
-			response.ParamErrorResponse(r, w, err)
+			response.ValidateErrOrResponse(r, w, err, svcCtx.Validator.Trans)
 			return
 		}
 
 		if err := svcCtx.Validator.Validate.StructCtx(r.Context(), req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.ValidateErrOrResponse(r, w, err, svcCtx.Validator.Trans)
 			return
 		}
 
 		l := order.NewSwitchOrderStateLogic(r.Context(), svcCtx)
 		resp, err := l.SwitchOrderState(&req)
 		response.Response(r, w, resp, err)
+		return
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
-	"go-common/interceptor/rpcservice"
+	"go-zero-base/interceptor/rpcservice"
 	"greet-pb/order/types/order"
 	"order/cmd/rpc/internal/config"
 	"order/cmd/rpc/internal/server"

@@ -6,7 +6,7 @@ import (
 	"errors"
 	"github.com/hibiken/asynq"
 	"github.com/shopspring/decimal"
-	"go-common/utils/xerr"
+	"go-zero-base/utils/xerr"
 	"gorm.io/gorm"
 	"greet-pb/user/types/user"
 	"order/cmd/business"
@@ -37,9 +37,6 @@ func NewCreateOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Creat
 }
 
 func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateOrderReply, error) {
-	return nil, xerr.NewBusinessError(xerr.SetCode("ErrorGoodsNotExists"), xerr.SetMsg("测试异常"))
-
-
 	query.SetDefault(l.svcCtx.DbEngine)
 	ctx := context.Background()
 	orderDAL := query.Goods
@@ -50,7 +47,7 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 	for _, createGoods := range in.OrderInfo.Goods {
 		goodsModel, err := orderDAL.WithContext(ctx).Where(orderDAL.ID.Eq(createGoods.GoodsId)).First()
 		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, xerr.NewBusinessError(xerr.SetCode("ErrorGoodsNotExists"))
+			return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("商品不存在"))
 		}
 
 		orderGoods := model.OrderGoods{
@@ -70,7 +67,7 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 	//验证订单金额
 	totalPrice, _ := decimal.NewFromString(in.TotalPrice)
 	if !goodsTotalAmount.Equal(totalPrice) {
-		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorOrderPrice"))
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("订单价格错误"))
 	}
 
 	orderModel.MemberID = 1
@@ -104,7 +101,7 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 	addressDal := query.Address
 	senderAddressModel, err := addressDal.WithContext(ctx).Where(addressDal.ID.Eq(in.OrderInfo.SenderAddressId)).First()
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorAddressNotExists"))
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("发货地址不存在"))
 	}
 	orderDetail.SenderName = senderAddressModel.ContactName
 	orderDetail.SenderMobile = senderAddressModel.ContactMobile
@@ -115,7 +112,7 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 
 	receiveAddressModel, err := addressDal.WithContext(ctx).Where(addressDal.ID.Eq(in.OrderInfo.ReceiveAddressId)).First()
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorAddressNotExists"))
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("收货地址不存在"))
 	}
 	orderDetail.ReceiveName = receiveAddressModel.ContactName
 	orderDetail.ReceiveMobile = receiveAddressModel.ContactMobile
