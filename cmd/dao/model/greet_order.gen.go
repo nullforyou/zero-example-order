@@ -56,8 +56,8 @@ type Order struct {
 	DeductBalance            float64               `gorm:"column:deduct_balance;type:decimal(10,2);not null;default:0.00" json:"deduct_balance"` // 余额抵扣金额
 	DeductType               int64                 `gorm:"column:deduct_type;type:tinyint;not null" json:"deduct_type"`                          // 抵扣类型:0-未抵扣 1-红包抵扣 2-个人余额抵扣 3-小巴余额
 
-	OrderDetail OrderDetail
-	Goods []OrderGoods
+	OrderDetail  OrderDetail
+	Goods        []OrderGoods
 	OrderPayment OrderPayment
 }
 

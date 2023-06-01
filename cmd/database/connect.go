@@ -14,7 +14,7 @@ func Connect() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "greet_", // 表名前缀，`User` 的表名应该是 `t_users`
-			SingularTable: true,    // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `t_user`
+			SingularTable: true,     // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `t_user`
 		},
 	})
 

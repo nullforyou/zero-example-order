@@ -12,27 +12,28 @@ import (
 
 const MySQLDSN = "root:jiangxiong@(127.0.0.1:3306)/greet?charset=utf8mb4&parseTime=True&loc=Local"
 
-/**
-	根据数据库表生成对应的model结构体
- */
+/*
+*
+根据数据库表生成对应的model结构体
+*/
 func main() {
 	// 连接数据库
 	db, err := gorm.Open(mysql.Open(MySQLDSN), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "greet_", // 表名前缀，`User` 的表名应该是 `t_users`
-			SingularTable: true,    // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `t_user`
+			SingularTable: true,     // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `t_user`
 		},
 	})
 	if err != nil {
-		fmt.Println(err.Error()); return
+		fmt.Println(err.Error())
+		return
 	}
 
 	// 生成实例
 	g := gen.NewGenerator(gen.Config{
 		// 相对执行`go run`时的路径, 会自动创建目录
-		OutPath: "cmd/dao/query",
+		OutPath:      "cmd/dao/query",
 		ModelPkgPath: "./model",
-
 
 		// WithDefaultQuery 生成默认查询结构体(作为全局变量使用), 即`Q`结构体和其字段(各表模型)
 		// WithoutContext 生成没有context调用限制的代码供查询
@@ -93,7 +94,6 @@ func main() {
 	//models := g.GenerateAllTable(fieldOpts...)
 	//model := g.GenerateModel("greet_member", fieldOpts...)
 
-
 	g.ApplyBasic(
 		g.GenerateModel("greet_address", fieldOpts...),
 		g.GenerateModel("greet_category", fieldOpts...),
@@ -104,33 +104,31 @@ func main() {
 		g.GenerateModel("greet_order_payment", fieldOpts...),
 	)
 
+	/*
 
-/*
+		// 这里创建个别模型仅仅是为了拿到`*generate.QueryStructMeta`类型对象用于后面的模型关联操作中
+		Address := g.GenerateModel("address")
 
-	// 这里创建个别模型仅仅是为了拿到`*generate.QueryStructMeta`类型对象用于后面的模型关联操作中
-	Address := g.GenerateModel("address")
+		// 创建有关联关系的模型文件
+		User := g.GenerateModel("user",
+			append(
+				fieldOpts,
+				// user 一对多 address 关联, 外键`uid`在 address 表中
+				gen.FieldRelate(field.HasMany, "Address", Address, &field.RelateConfig{GORMTag: "foreignKey:UID"}),
+			)...,
+		)
+		Address = g.GenerateModel("address",
+			append(
+				fieldOpts,
+				gen.FieldRelate(field.BelongsTo, "User", User, &field.RelateConfig{GORMTag: "foreignKey:UID"}),
+			)...,
+		)
 
-	// 创建有关联关系的模型文件
-	User := g.GenerateModel("user",
-		append(
-			fieldOpts,
-			// user 一对多 address 关联, 外键`uid`在 address 表中
-			gen.FieldRelate(field.HasMany, "Address", Address, &field.RelateConfig{GORMTag: "foreignKey:UID"}),
-		)...,
-	)
-	Address = g.GenerateModel("address",
-		append(
-			fieldOpts,
-			gen.FieldRelate(field.BelongsTo, "User", User, &field.RelateConfig{GORMTag: "foreignKey:UID"}),
-		)...,
-	)
-
-	// 创建模型的方法,生成文件在 query 目录; 先创建结果不会被后创建的覆盖
-	g.ApplyBasic(User, Address)
+		// 创建模型的方法,生成文件在 query 目录; 先创建结果不会被后创建的覆盖
+		g.ApplyBasic(User, Address)
 	*/
 	//g.ApplyBasic(models...)
 	//g.ApplyBasic(model)
 
 	g.Execute()
 }
-

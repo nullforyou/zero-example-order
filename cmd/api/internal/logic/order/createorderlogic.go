@@ -29,28 +29,27 @@ func (l *CreateOrderLogic) CreateOrder(req *types.CreateOrderReq) (resp *types.C
 		return nil, err
 	}
 
-	rpcCreateOrderReq := orderRpc.CreateOrderReq{UserId: userId,TotalPrice: tool.Float64ToString(req.TotalPrice, 2)}
+	rpcCreateOrderReq := orderRpc.CreateOrderReq{UserId: userId, TotalPrice: tool.Float64ToString(req.TotalPrice, 2)}
 	rpcCreateOrderInfo := orderRpc.CreateOrderInfo{
-		Client: req.OrderInfo.Client,
+		Client:               req.OrderInfo.Client,
 		AppointmentStartTime: req.OrderInfo.AppointmentStartTime,
-		AppointmentEndTime: req.OrderInfo.AppointmentEndTime,
-		SenderAddressId: req.OrderInfo.SenderAddressId,
-		ReceiveAddressId: req.OrderInfo.ReceiveAddressId,
-		Remark: req.OrderInfo.Remark,
+		AppointmentEndTime:   req.OrderInfo.AppointmentEndTime,
+		SenderAddressId:      req.OrderInfo.SenderAddressId,
+		ReceiveAddressId:     req.OrderInfo.ReceiveAddressId,
+		Remark:               req.OrderInfo.Remark,
 	}
 
 	for _, orderGoodsReq := range req.OrderInfo.Goods {
 		orderGoods := orderRpc.CreateOrderGoods{
-			GoodsId: orderGoodsReq.GoodsId,
+			GoodsId:   orderGoodsReq.GoodsId,
 			GoodsName: orderGoodsReq.GoodsName,
-			Num: orderGoodsReq.Num,
+			Num:       orderGoodsReq.Num,
 		}
 		rpcCreateOrderInfo.Goods = append(rpcCreateOrderInfo.Goods, &orderGoods)
 	}
 	rpcCreateOrderReq.OrderInfo = &rpcCreateOrderInfo
 	// 使用order rpc
 	order, err := l.svcCtx.OrderRpc.CreateOrder(l.ctx, &rpcCreateOrderReq)
-
 
 	if err != nil {
 		return nil, err

@@ -24,7 +24,7 @@ func NewGetOrdersLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetOrde
 	}
 }
 
-func (l *GetOrdersLogic) GetOrders(req *types.OrdersCollectionReq) (resp *[]types.OrdersCollectionResp , err error) {
+func (l *GetOrdersLogic) GetOrders(req *types.OrdersCollectionReq) (resp *[]types.OrdersCollectionResp, err error) {
 	err = l.svcCtx.DbEngine.Model(model.Order{}).Preload("OrderDetail").Limit(req.PageSize).Offset((req.Page - 1) * req.PageSize).Find(&resp).Error
 	return resp, nil
 }

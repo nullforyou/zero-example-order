@@ -28,7 +28,7 @@ func (GreetAddress) TableName() string {
 	return "greet_address"
 }
 
-func main()  {
+func main() {
 	db := database.Connect()
 	db.AutoMigrate(&GreetAddress{})
 }

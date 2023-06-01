@@ -7,8 +7,8 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Mysql struct{
-		DataSource string
+	Mysql struct {
+		DataSource  string
 		TablePrefix string
 	}
 	Jwt struct {

@@ -25,7 +25,7 @@ func (GreetCategory) TableName() string {
 	return "greet_category"
 }
 
-func main()  {
+func main() {
 	db := database.Connect()
 	db.AutoMigrate(&GreetCategory{})
 }

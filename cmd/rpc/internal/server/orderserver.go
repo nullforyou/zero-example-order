@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
+	"greet-pb/order/types/order"
 	"order/cmd/rpc/internal/logic"
 	"order/cmd/rpc/internal/svc"
-	"greet-pb/order/types/order"
 )
 
 type OrderServer struct {

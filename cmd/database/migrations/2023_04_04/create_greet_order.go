@@ -59,7 +59,7 @@ func (GreetOrder) TableName() string {
 	return "greet_order"
 }
 
-func main()  {
+func main() {
 	db := database.Connect()
 	db.AutoMigrate(&GreetOrder{})
 }

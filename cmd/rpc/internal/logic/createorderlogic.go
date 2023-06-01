@@ -51,13 +51,13 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 		}
 
 		orderGoods := model.OrderGoods{
-			CategoryID: goodsModel.Category.CategoryID,
+			CategoryID:   goodsModel.Category.CategoryID,
 			CategoryName: goodsModel.Category.CategoryName,
-			GoodsID: goodsModel.ID,
-			GoodsName: goodsModel.GoodsName,
+			GoodsID:      goodsModel.ID,
+			GoodsName:    goodsModel.GoodsName,
 			GoodsPicture: goodsModel.GoodsPicture,
-			GoodsPrice: goodsModel.GoodsPrice,
-			GoodsNum: createGoods.Num,
+			GoodsPrice:   goodsModel.GoodsPrice,
+			GoodsNum:     createGoods.Num,
 		}
 		orderModel.Goods = append(orderModel.Goods, orderGoods)
 
