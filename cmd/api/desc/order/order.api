@@ -21,17 +21,19 @@ type (
     }
 
     CreateOrderResp {
-        Id                int64  `json:"id"`
         OrderSerialNumber string `json:"order_serial_number"`
     }
 
     OrderItemReq {
-        Id int64 `path:"id"`
+        OrderSerialNumber string `path:"order_serial_number"`
     }
 
     OrderItemResp {
-        Id                int64  `json:"id"`
         OrderSerialNumber string `json:"order_serial_number"`
+        OrderStatus       string `json:"order_status"`
+        OrderAmount       string `json:"order_amount"`
+        GoodsNum          string `json:"goods_num"`
+        PaymentLimitTime  string `json:"payment_limit_time"`
     }
 
     OrdersCollectionReq {
@@ -40,11 +42,15 @@ type (
     }
 
     OrdersCollectionResp {
-        Id                int64  `json:"id"`
+        OrderItemResp
+    }
+
+    SwitchOrderStateReq {
+        OrderSerialNumber string `path:"order_serial_number" validate:"required"`
+        State string `json:"state" validate:"required,eq=cancel|eq=delete"`
+    }
+
+    SwitchOrderStateResp {
         OrderSerialNumber string `json:"order_serial_number"`
-        OrderStatus       string `json:"order_status"`
-        OrderAmount       string `json:"order_amount"`
-        GoodsNum          string `json:"goods_num"`
-        PaymentLimitTime  string `json:"payment_limit_time"`
     }
 )

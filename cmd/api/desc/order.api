@@ -29,5 +29,9 @@ service orders-api {
 	
 	@doc "获取订单详情"
 	@handler getOrder
-	get /orders/:id (OrderItemReq) returns (OrderItemResp)
+	get /orders/:order_serial_number (OrderItemReq) returns (OrderItemResp)
+	
+	@doc "取消|关闭 订单"
+	@handler switchOrderState
+	put /orders/:order_serial_number/state (SwitchOrderStateReq) returns (SwitchOrderStateResp)
 }

@@ -9,8 +9,22 @@ const (
 	YYMMDDHHMMSS = "2006-01-02 15:04:05"
 )
 
+const CLOSE_ORDER_TIME_MINUTES = 30 //defer close order time
+
 const (
 	PAYMENT_LIMIT_TIME = "15m" //订单支付过期时间
+)
+
+// 操作状态
+const (
+	IS_SURE = 1 //表示肯定
+	IS_DENY = 0 //表示否定
+)
+
+const (
+	USER_CANCEL = 1 //用户取消
+	SYSTEM_CANCEL = 2 //系统取消
+	STAFF_CANCEL = 3 //平台管理取消
 )
 
 const (
@@ -20,8 +34,7 @@ const (
 	PAID_STATE = 20 //已支付待完成
 	FINISHED_STATE = 40 //已完成待结算
 	SETTLED_STATE = 50 //已结算
-	CLOSED = -50 //已关闭 (此状态只用于筛选和展示,不需要保存到数据库)
-	APPEND_WAIT_PAYMENT_STATE = 11 //补差价 (此状态只用于筛选和展示,不需要保存到数据库)
+	IS_CLOSED = -20 //已关闭
 	/* 订单状态 end */
 )
 
@@ -33,8 +46,7 @@ func OrderStateZhCN(code int64) string {
 		PAID_STATE : "已支付",
 		FINISHED_STATE : "已完成",
 		SETTLED_STATE : "已结算",
-		CLOSED : "已关闭",
-		APPEND_WAIT_PAYMENT_STATE : "补差价",
+		IS_CLOSED : "已关闭",
 	}
 	return orderStateZhCN[code]
 }

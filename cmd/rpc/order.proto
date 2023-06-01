@@ -1,19 +1,68 @@
 syntax = "proto3";
 
-package user;
+package order;
 
 option go_package = "./order";
 
 message CreateOrderReq{
-int64 id = 1;
+    int64 UserId = 1;
+    string TotalPrice = 2;
+    CreateOrderInfo OrderInfo = 3;
+}
+
+message CreateOrderInfo{
+    int64 Client = 1;
+    string AppointmentStartTime = 2;
+    string AppointmentEndTime = 3;
+    int64 SenderAddressId = 4;
+    int64 ReceiveAddressId = 5;
+    string Remark = 6;
+    repeated CreateOrderGoods Goods = 7;
+}
+
+message CreateOrderGoods{
+    int64 GoodsId = 1;
+    int64 Num = 2;
+    string GoodsName = 3;
 }
 
 message CreateOrderReply{
-int64 id = 1;
-string mobile = 2;
-string nikename = 3;
+ string OrderSerialNumber = 1;
 }
 
-service user {
-rpc getUser(IdReq) returns(UserInfoReply);
+message CancelOrderReq{
+    string OrderSerialNumber = 1;
+    int64 CancelOperator = 2;
+    string CancelCause = 3;
+}
+
+message CancelOrderReply{
+    string OrderSerialNumber = 1;
+}
+
+message CloseOrderReq{
+    string OrderSerialNumber = 1;
+}
+
+message CloseOrderReply{
+    string OrderSerialNumber = 1;
+}
+
+message DeleteOrderReq{
+    string OrderSerialNumber = 1;
+}
+
+message DeleteOrderReply{
+    string OrderSerialNumber = 1;
+}
+
+service order {
+    //创建订单
+    rpc createOrder(CreateOrderReq) returns(CreateOrderReply);
+    //关闭订单
+    rpc closeOrder(CloseOrderReq) returns(CloseOrderReply);
+    //取消订单
+    rpc cancelOrder(CancelOrderReq) returns(CancelOrderReply);
+    //删除订单
+    rpc deleteOrder(DeleteOrderReq) returns(DeleteOrderReply);
 }

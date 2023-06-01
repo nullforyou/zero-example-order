@@ -23,17 +23,19 @@ type CreateOrderGoods struct {
 }
 
 type CreateOrderResp struct {
-	Id                int64  `json:"id"`
 	OrderSerialNumber string `json:"order_serial_number"`
 }
 
 type OrderItemReq struct {
-	Id int64 `path:"id"`
+	OrderSerialNumber string `path:"order_serial_number"`
 }
 
 type OrderItemResp struct {
-	Id                int64  `json:"id"`
 	OrderSerialNumber string `json:"order_serial_number"`
+	OrderStatus       string `json:"order_status"`
+	OrderAmount       string `json:"order_amount"`
+	GoodsNum          string `json:"goods_num"`
+	PaymentLimitTime  string `json:"payment_limit_time"`
 }
 
 type OrdersCollectionReq struct {
@@ -42,10 +44,14 @@ type OrdersCollectionReq struct {
 }
 
 type OrdersCollectionResp struct {
-	Id                int64  `json:"id"`
+	OrderItemResp
+}
+
+type SwitchOrderStateReq struct {
+	OrderSerialNumber string `path:"order_serial_number" validate:"required"`
+	State             string `json:"state" validate:"required,eq=cancel|eq=delete"`
+}
+
+type SwitchOrderStateResp struct {
 	OrderSerialNumber string `json:"order_serial_number"`
-	OrderStatus       string `json:"order_status"`
-	OrderAmount       string `json:"order_amount"`
-	GoodsNum          string `json:"goods_num"`
-	PaymentLimitTime  string `json:"payment_limit_time"`
 }

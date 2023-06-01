@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"go-common/utils/xerr"
-	"order/cmd/dao/model"
 	"gorm.io/gorm"
+	"order/cmd/dao/model"
 
 	"order/cmd/api/internal/svc"
 	"order/cmd/api/internal/types"
@@ -28,7 +28,7 @@ func NewGetOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetOrder
 }
 
 func (l *GetOrderLogic) GetOrder(req *types.OrderItemReq) (resp *types.OrderItemResp, err error) {
-	err = l.svcCtx.DbEngine.Model(model.Order{}).First(&resp, req.Id).Error
+	err = l.svcCtx.DbEngine.Model(model.Order{}).Where("order_serial_number = ?", req.OrderSerialNumber).First(&resp).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, xerr.NewBusinessError(xerr.SetCode("ErrorOrderNotExists"), xerr.SetMsg("订单不存在"))
 	}

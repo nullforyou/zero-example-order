@@ -1,0 +1,25 @@
+Name: order.rpc
+ListenOn: 0.0.0.0:2002
+Log:
+  ServiceName: order.rpc
+  Mode: console
+  Encoding: plain
+  Level: info
+  Path: storage/logs
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: order.rpc
+Mysql:
+  DataSource: root:jiangxiong@(127.0.0.1:3306)/greet?charset=utf8mb4&parseTime=True
+  TablePrefix: greet
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: jiangx
+  Key: order.rpc
+UserRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc

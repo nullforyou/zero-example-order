@@ -10,16 +10,15 @@ Log:
 Mysql:
   DataSource: root:jiangxiong@(127.0.0.1:3306)/greet?charset=utf8mb4&parseTime=True
   TablePrefix: greet
-CacheRedis:
-  - Host: 127.0.0.1:6379
-    Pass: jiangxiong
-    Type: node
+Redis:
+  Host: 127.0.0.1:6379
+  Pass: jiangx
+  Type: node
 Jwt:
   AccessSecret: 26dd14afdb7e622637b2abf4f15a5714a64df2ef6440bb6617e814815ae973ddd2998298c4491e165ae50bf0790fba8afce9b350e466e421974881c13d034f8d
   AccessExpire: 31104000
-
-UserRpc:
+OrderRpc:
   Etcd:
     Hosts:
       - 127.0.0.1:2379
-    Key: user.rpc
+    Key: order.rpc

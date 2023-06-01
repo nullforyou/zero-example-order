@@ -25,8 +25,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/orders/:id",
+				Path:    "/orders/:order_serial_number",
 				Handler: order.GetOrderHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/orders/:order_serial_number/state",
+				Handler: order.SwitchOrderStateHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Jwt.AccessSecret),
