@@ -1,5 +1,5 @@
 Name: order.rpc
-Mode: dev
+Mode: pro
 ListenOn: 0.0.0.0:2002
 Log:
   ServiceName: order.rpc

@@ -1,6 +1,7 @@
 Name: orders-api
 Host: 0.0.0.0
 Port: 8002
+Mode: pro
 Log:
   ServiceName: order-api
   Mode: console
