@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"errors"
+	"github.com/pkg/errors"
 	"go-zero-base/utils/xerr"
 	"gorm.io/gorm"
 	"order/cmd/business"
@@ -38,6 +38,7 @@ func (l *CancelOrderLogic) CancelOrder(in *order.CancelOrderReq) (*order.CancelO
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorNotFound), xerr.SetMsg("订单不存在"))
 	}
+
 	if orderModel.OrderStatus == business.WAIT_PAYMENT_STATE {
 		updateOrder := model.Order{}
 		updateOrder.OrderStatus = business.CANCELLED_STATE
