@@ -11,7 +11,7 @@ import (
 	"order/cmd/api/internal/svc"
 )
 
-var configFile = flag.String("f", "etc/orders-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/order-api.yaml", "the config file")
 
 func main() {
 	flag.Parse()

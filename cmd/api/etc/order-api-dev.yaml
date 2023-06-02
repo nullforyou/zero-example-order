@@ -1,4 +1,4 @@
-Name: orders-api
+Name: order-api
 Host: 0.0.0.0
 Port: 8002
 Mode: pro
@@ -23,3 +23,10 @@ OrderRpc:
     Hosts:
       - 127.0.0.1:2379
     Key: order.rpc
+
+#链路追踪
+Telemetry:
+  Name: order-api
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
