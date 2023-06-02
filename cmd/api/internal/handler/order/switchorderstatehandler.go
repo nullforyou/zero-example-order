@@ -14,12 +14,12 @@ func SwitchOrderStateHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.SwitchOrderStateReq
 		if err := httpx.Parse(r, &req); err != nil {
-			response.ValidateErrOrResponse(r, w, err, svcCtx.Validator.Trans)
+			response.ParseParamErrResponse(r, w, err)
 			return
 		}
 
 		if err := svcCtx.Validator.Validate.StructCtx(r.Context(), req); err != nil {
-			response.ValidateErrOrResponse(r, w, err, svcCtx.Validator.Trans)
+			response.ValidateErrResponse(r, w, err, svcCtx.Validator.Trans)
 			return
 		}
 
