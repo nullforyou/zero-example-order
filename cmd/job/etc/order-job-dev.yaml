@@ -1,0 +1,34 @@
+Name: order-job
+Host: 0.0.0.0
+Port: 8013
+Mode: pro
+Log:
+  ServiceName: order-job
+  Mode: console
+  Encoding: plain
+  Level: debug
+  Path: storage/logs
+
+Redis:
+    Host: 127.0.0.1:36379
+    Pass: jiangx
+    Type: node
+    Key: order-job
+OrderRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: order.rpc
+
+#链路追踪
+Telemetry:
+  Name: order-job
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4013
+  Path: /metrics

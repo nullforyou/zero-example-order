@@ -1,6 +1,6 @@
 Name: order-api
 Host: 0.0.0.0
-Port: 8002
+Port: 8011
 Mode: dev
 Log:
   ServiceName: order-api
@@ -34,5 +34,5 @@ Telemetry:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 4001
+  Port: 4011
   Path: /metrics

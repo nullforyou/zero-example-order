@@ -1,6 +1,6 @@
 Name: order-rpc
 Mode: dev
-ListenOn: 0.0.0.0:2002
+ListenOn: 0.0.0.0:8012
 Log:
   ServiceName: order.rpc
   Mode: console
@@ -35,5 +35,5 @@ Telemetry:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 4002
+  Port: 4012
   Path: /metrics

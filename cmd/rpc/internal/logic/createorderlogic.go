@@ -12,7 +12,7 @@ import (
 	"order/cmd/business"
 	"order/cmd/dao/model"
 	"order/cmd/dao/query"
-	"order/cmd/rpc/jobtype"
+	"order/cmd/jobtype"
 	"strconv"
 	"time"
 
