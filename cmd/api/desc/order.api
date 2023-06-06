@@ -18,7 +18,7 @@ import (
 	jwt: Jwt
 )
 
-service orders-api {
+service order-api {
 	@doc "获取订单列表"
 	@handler getOrders
 	get /orders (OrdersCollectionReq) returns (OrdersCollectionResp)

@@ -133,7 +133,7 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 	if err != nil {
 		logx.WithContext(l.ctx).Errorf("创建演示订单任务的载荷时错误:%+v, sn:%s", err, orderModel.OrderSerialNumber)
 	}
-	//_, err = l.svcCtx.AsynqClient.Enqueue(asynq.NewTask(jobtype.DeferCloseOrderJob, payload), asynq.ProcessIn(business.CLOSE_ORDER_TIME_MINUTES * time.Minute))
+	_, err = l.svcCtx.AsynqClient.Enqueue(asynq.NewTask(jobtype.DeferCloseOrderJob, payload), asynq.ProcessIn(business.CLOSE_ORDER_TIME_MINUTES * time.Minute))
 	_, err = l.svcCtx.AsynqClient.Enqueue(asynq.NewTask(jobtype.DeferCloseOrderJob, payload))
 	if err != nil {
 		logx.WithContext(l.ctx).Errorf("创建延时关闭订单任务时错误:%+v, sn:%s", err, orderModel.OrderSerialNumber)
