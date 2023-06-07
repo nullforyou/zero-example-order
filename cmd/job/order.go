@@ -13,7 +13,7 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 )
 
-var configFile = flag.String("f", "etc/mqueue-job.yaml", "Specify the config file")
+var configFile = flag.String("f", "etc/order-job.yaml", "Specify the config file")
 
 func main() {
 	flag.Parse()
