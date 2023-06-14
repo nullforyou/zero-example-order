@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"greet-pb/order/types/order"
 	"order/cmd/rpc/internal/logic"
 	"order/cmd/rpc/internal/svc"
+	"greet-pb/order/types/order"
 )
 
 type OrderServer struct {
@@ -20,6 +20,12 @@ func NewOrderServer(svcCtx *svc.ServiceContext) *OrderServer {
 	return &OrderServer{
 		svcCtx: svcCtx,
 	}
+}
+
+// 查询订单
+func (s *OrderServer) GetOrder(ctx context.Context, in *order.GetOrderReq) (*order.GetOrderReply, error) {
+	l := logic.NewGetOrderLogic(ctx, s.svcCtx)
+	return l.GetOrder(in)
 }
 
 // 创建订单
@@ -34,7 +40,7 @@ func (s *OrderServer) CloseOrder(ctx context.Context, in *order.CloseOrderReq) (
 	return l.CloseOrder(in)
 }
 
-// 关闭订单
+// 取消订单
 func (s *OrderServer) CancelOrder(ctx context.Context, in *order.CancelOrderReq) (*order.CancelOrderReply, error) {
 	l := logic.NewCancelOrderLogic(ctx, s.svcCtx)
 	return l.CancelOrder(in)
@@ -44,4 +50,22 @@ func (s *OrderServer) CancelOrder(ctx context.Context, in *order.CancelOrderReq)
 func (s *OrderServer) DeleteOrder(ctx context.Context, in *order.DeleteOrderReq) (*order.DeleteOrderReply, error) {
 	l := logic.NewDeleteOrderLogic(ctx, s.svcCtx)
 	return l.DeleteOrder(in)
+}
+
+// 订单支付成功TccTry
+func (s *OrderServer) PaymentSuccessOrderTccTry(ctx context.Context, in *order.PaymentSuccessTccReq) (*order.PaymentSuccessTccReply, error) {
+	l := logic.NewPaymentSuccessOrderTccTryLogic(ctx, s.svcCtx)
+	return l.PaymentSuccessOrderTccTry(in)
+}
+
+// 订单支付成功TccConfirm
+func (s *OrderServer) PaymentSuccessOrderTccConfirm(ctx context.Context, in *order.PaymentSuccessTccReq) (*order.PaymentSuccessTccReply, error) {
+	l := logic.NewPaymentSuccessOrderTccConfirmLogic(ctx, s.svcCtx)
+	return l.PaymentSuccessOrderTccConfirm(in)
+}
+
+// 订单支付成功TccCancel
+func (s *OrderServer) PaymentSuccessOrderTccCancel(ctx context.Context, in *order.PaymentSuccessTccReq) (*order.PaymentSuccessTccReply, error) {
+	l := logic.NewPaymentSuccessOrderTccCancelLogic(ctx, s.svcCtx)
+	return l.PaymentSuccessOrderTccCancel(in)
 }

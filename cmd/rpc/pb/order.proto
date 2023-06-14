@@ -56,7 +56,35 @@ message DeleteOrderReply{
     string OrderSerialNumber = 1;
 }
 
+message GetOrderReq{
+    string OrderSerialNumber = 1;
+}
+
+message GetOrderReply{
+    int64 ID  = 1;
+    string OrderSerialNumber  = 2;
+    int64 MemberID = 3;
+    int64 Client = 4;
+    int64 OrderStatus = 5;
+    string OrderStatusName = 6;
+    string OrderAmount = 7;
+    string MemberNickname = 8;
+    string MemberMobile = 9;
+    string PaymentAmount = 10;
+    string PaymentSn = 11;
+    int64 PaymentType = 12;
+    int64 PaymentTime = 13;
+    int64 PaymentStatus = 14;
+    int64 GoodsNum = 15;
+    int64 PaymentLimitTime = 16;
+}
+
+message PaymentSuccessTccReq{}
+message PaymentSuccessTccReply{}
+
 service order {
+    //查询订单
+    rpc getOrder(GetOrderReq) returns(GetOrderReply);
     //创建订单
     rpc createOrder(CreateOrderReq) returns(CreateOrderReply);
     //关闭订单
@@ -65,4 +93,11 @@ service order {
     rpc cancelOrder(CancelOrderReq) returns(CancelOrderReply);
     //删除订单
     rpc deleteOrder(DeleteOrderReq) returns(DeleteOrderReply);
+
+    //订单支付成功TccTry
+    rpc paymentSuccessOrderTccTry(PaymentSuccessTccReq) returns(PaymentSuccessTccReply);
+    //订单支付成功TccConfirm
+    rpc paymentSuccessOrderTccConfirm(PaymentSuccessTccReq) returns(PaymentSuccessTccReply);
+    //订单支付成功TccCancel
+    rpc paymentSuccessOrderTccCancel(PaymentSuccessTccReq) returns(PaymentSuccessTccReply);
 }

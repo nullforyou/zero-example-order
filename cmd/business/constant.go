@@ -9,8 +9,6 @@ const (
 	YYMMDDHHMMSS = "2006-01-02 15:04:05"
 )
 
-const CLOSE_ORDER_TIME_MINUTES = 30 //defer close order time
-
 const (
 	PAYMENT_LIMIT_TIME = "15m" //订单支付过期时间
 )

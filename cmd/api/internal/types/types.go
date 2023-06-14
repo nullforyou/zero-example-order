@@ -32,9 +32,9 @@ type OrderItemReq struct {
 
 type OrderItemResp struct {
 	OrderSerialNumber string `json:"order_serial_number"`
-	OrderStatus       string `json:"order_status"`
+	OrderStatus       int64  `json:"order_status"`
 	OrderAmount       string `json:"order_amount"`
-	GoodsNum          string `json:"goods_num"`
+	GoodsNum          int64  `json:"goods_num"`
 	PaymentLimitTime  string `json:"payment_limit_time"`
 }
 

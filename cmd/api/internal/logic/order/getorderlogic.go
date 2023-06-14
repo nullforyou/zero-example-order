@@ -2,13 +2,11 @@ package order
 
 import (
 	"context"
-	"errors"
-	"go-zero-base/utils/xerr"
-	"gorm.io/gorm"
-	"order/cmd/dao/model"
-
+	"greet-pb/order/orderclient"
 	"order/cmd/api/internal/svc"
 	"order/cmd/api/internal/types"
+	"order/cmd/business"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -29,9 +27,19 @@ func NewGetOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetOrder
 
 func (l *GetOrderLogic) GetOrder(req *types.OrderItemReq) (resp *types.OrderItemResp, err error) {
 
-	err = l.svcCtx.DbEngine.Model(model.Order{}).Where("order_serial_number = ?", req.OrderSerialNumber).First(&resp).Error
-	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorNotFound), xerr.SetMsg("订单不存在"))
+	order, err := l.svcCtx.OrderRpc.GetOrder(l.ctx, &orderclient.GetOrderReq{OrderSerialNumber: req.OrderSerialNumber})
+
+	if err != nil {
+		return nil, err
 	}
-	return resp, nil
+
+	formatTimeStr := time.Unix(order.PaymentLimitTime, 0).Format(business.YYMMDDHHMMSS)
+
+	return &types.OrderItemResp{
+		OrderSerialNumber: order.OrderSerialNumber,
+		OrderStatus:       order.OrderStatus,
+		OrderAmount:       order.OrderAmount,
+		GoodsNum:          order.GoodsNum,
+		PaymentLimitTime:  formatTimeStr,
+	}, nil
 }
