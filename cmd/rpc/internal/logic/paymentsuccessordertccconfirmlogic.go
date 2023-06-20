@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-
 	"greet-pb/order/types/order"
 	"order/cmd/rpc/internal/svc"
 
@@ -27,5 +26,6 @@ func NewPaymentSuccessOrderTccConfirmLogic(ctx context.Context, svcCtx *svc.Serv
 func (l *PaymentSuccessOrderTccConfirmLogic) PaymentSuccessOrderTccConfirm(in *order.PaymentSuccessTccReq) (*order.PaymentSuccessTccReply, error) {
 	// todo: add your logic here and delete this line
 	logx.WithContext(l.ctx).Info("进入 PaymentSuccessOrderTccConfirm")
+
 	return &order.PaymentSuccessTccReply{}, nil
 }
