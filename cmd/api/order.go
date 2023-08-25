@@ -6,6 +6,9 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
+	"go-zero-base/utils/response"
+	"go-zero-base/utils/xerr"
+	"net/http"
 	"order/cmd/api/internal/config"
 	"order/cmd/api/internal/handler"
 	"order/cmd/api/internal/svc"
@@ -21,7 +24,10 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 
-	server := rest.MustNewServer(c.RestConf)
+	server := rest.MustNewServer(c.RestConf, rest.WithUnauthorizedCallback(func(w http.ResponseWriter, r *http.Request, err error) {
+		//JWT验证失败自定义处理
+		response.Response(r, w, nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorTokenExpire)))
+	}))
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)
