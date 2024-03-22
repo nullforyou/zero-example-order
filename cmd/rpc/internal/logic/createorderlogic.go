@@ -70,7 +70,7 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("订单价格错误"))
 	}
 
-	orderModel.MemberID = 1
+	orderModel.MemberID = in.UserId
 	orderModel.Client = in.OrderInfo.Client
 	orderModel.OrderStatus = business.WAIT_PAYMENT_STATE
 	orderModel.OrderStatusName = business.OrderStateZhCN(orderModel.OrderStatus)
@@ -91,15 +91,21 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 	orderDetail := model.OrderDetail{}
 
 	appointmentStartTime, _ := time.ParseInLocation(business.YYMMDDHHMM, in.OrderInfo.AppointmentStartTime, time.Local)
+	if appointmentStartTime.Unix() < time.Now().Unix() {
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("预约时间不能小于当前时间"))
+	}
 	orderDetail.AppointmentStartTime = appointmentStartTime
 
 	appointmentEndTime, _ := time.ParseInLocation(business.YYMMDDHHMM, in.OrderInfo.AppointmentEndTime, time.Local)
+	if appointmentEndTime.Unix() < time.Now().Unix() {
+		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("预约时间不能小于当前时间"))
+	}
 	orderDetail.AppointmentEndTime = appointmentEndTime
 
 	orderDetail.Remark = in.OrderInfo.Remark
 
 	addressDal := query.Address
-	senderAddressModel, err := addressDal.WithContext(ctx).Where(addressDal.ID.Eq(in.OrderInfo.SenderAddressId)).First()
+	senderAddressModel, err := addressDal.WithContext(ctx).Where(addressDal.ID.Eq(in.OrderInfo.SenderAddressId)).Where(addressDal.MemberID.Eq(in.UserId)).First()
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("发货地址不存在"))
 	}
@@ -110,7 +116,7 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 	orderDetail.SenderCounty = senderAddressModel.CountyName
 	orderDetail.SenderAddress = senderAddressModel.DetailedAddress
 
-	receiveAddressModel, err := addressDal.WithContext(ctx).Where(addressDal.ID.Eq(in.OrderInfo.ReceiveAddressId)).First()
+	receiveAddressModel, err := addressDal.WithContext(ctx).Where(addressDal.ID.Eq(in.OrderInfo.ReceiveAddressId)).Where(addressDal.MemberID.Eq(in.UserId)).First()
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, xerr.NewBusinessError(xerr.SetCode(xerr.ErrorBusiness), xerr.SetMsg("收货地址不存在"))
 	}
@@ -133,8 +139,8 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderReq) (*order.CreateO
 	if err != nil {
 		logx.WithContext(l.ctx).Errorf("创建演示订单任务的载荷时错误:%+v, sn:%s", err, orderModel.OrderSerialNumber)
 	}
+
 	_, err = l.svcCtx.AsynqClient.Enqueue(asynq.NewTask(jobtype.DeferCloseOrderJob, payload), asynq.ProcessAt(paymentLimitTime))
-	_, err = l.svcCtx.AsynqClient.Enqueue(asynq.NewTask(jobtype.DeferCloseOrderJob, payload))
 	if err != nil {
 		logx.WithContext(l.ctx).Errorf("创建延时关闭订单任务时错误:%+v, sn:%s", err, orderModel.OrderSerialNumber)
 	}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gorm.io/gen/field"
 	"gorm.io/gorm/schema"
 	"strings"
 
@@ -60,12 +61,12 @@ func main() {
 
 	// 自定义字段的数据类型
 	// 统一数字类型为int64,兼容protobuf
-	dataMap := map[string]func(detailType string) (dataType string){
-		"tinyint":   func(detailType string) (dataType string) { return "int64" },
-		"smallint":  func(detailType string) (dataType string) { return "int64" },
-		"mediumint": func(detailType string) (dataType string) { return "int64" },
-		"bigint":    func(detailType string) (dataType string) { return "int64" },
-		"int":       func(detailType string) (dataType string) { return "int64" },
+	dataMap := map[string]func(columnType gorm.ColumnType) (dataType string){
+		"tinyint":   func(columnType gorm.ColumnType) (dataType string) { return "int64" },
+		"smallint":  func(columnType gorm.ColumnType) (dataType string) { return "int64" },
+		"mediumint": func(columnType gorm.ColumnType) (dataType string) { return "int64" },
+		"bigint":    func(columnType gorm.ColumnType) (dataType string) { return "int64" },
+		"int":       func(columnType gorm.ColumnType) (dataType string) { return "int64" },
 	}
 	// 要先于`ApplyBasic`执行
 	g.WithDataTypeMap(dataMap)
@@ -82,8 +83,12 @@ func main() {
 	// 将非默认字段名的字段定义为自动时间戳和软删除字段;
 	// 自动时间戳默认字段名为:`updated_at`、`created_at, 表字段数据类型为: INT 或 DATETIME
 	// 软删除默认字段名为:`deleted_at`, 表字段数据类型为: DATETIME
-	autoUpdateTimeField := gen.FieldGORMTag("updated_at", "column:updated_at;type:timestamp;autoUpdateTime")
-	autoCreateTimeField := gen.FieldGORMTag("created_at", "column:created_at;type:timestamp;autoCreateTime")
+	autoUpdateTimeField := gen.FieldGORMTag("updated_at", func(tag field.GormTag) field.GormTag {
+		return tag.Append("autoUpdateTime")
+	})
+	autoCreateTimeField := gen.FieldGORMTag("created_at", func(tag field.GormTag) field.GormTag {
+		return tag.Append("autoCreateTime")
+	})
 	softDeleteField := gen.FieldType("deleted_at", "soft_delete.DeletedAt")
 	// 模型自定义选项组
 	fieldOpts := []gen.ModelOpt{jsonField, autoCreateTimeField, autoUpdateTimeField, softDeleteField}
